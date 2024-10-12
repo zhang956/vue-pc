@@ -16,7 +16,7 @@ export default {
   },
   data () {
     return {
-      coloree: 'purple',
+      coloree: 'white',
       sizeColor: 'black'
     }
   },
@@ -27,8 +27,8 @@ export default {
     typeState (newVal) {
       console.log('数据的监听', newVal)
       if (newVal) {
-        this.coloree = 'pink';
-        this.sizeColor = 'white'
+        this.coloree = 'white';
+        this.sizeColor = 'black'
       } else {
         this.coloree = 'purple';
         this.sizeColor = 'black'

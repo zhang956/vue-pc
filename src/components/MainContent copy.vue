@@ -5,6 +5,13 @@
  * @Date: 2024-10-11 11:52:15
  * @LastEditors: Zhangwenzhe
 -->
+<!--
+ * @Description: 左边菜单栏
+ * @Author: Zhangwenzhe
+ * @Github: KOBE
+ * @Date: 2024-09-09 16:07:14
+ * @LastEditors: Zhangwenzhe
+-->
 <template>
   <el-menu :default-openeds="defaultOpeneds"
            :default-active="defaultActive"
@@ -59,10 +66,19 @@ export default {
           icon: 'el-icon-s-home',
           url: 'Home/home'
         },
+        // {
+        //   path: '/mall',
+        //   name: 'mall',
+        //   lable: '商品管理',
+        //   icon: 'el-icon-s-home',
+        //   url: 'MallManage/MallManage'
+        // },
         {
+          // path: '/user',
           name: 'user',
           lable: '系统管理',
           icon: 'el-icon-s-home',
+          // url: 'UserManage/UserManage'
           children: [
             {
               path: '/userManagement',
@@ -114,7 +130,6 @@ export default {
     }
   },
   created () {
-    // 从localStorage中恢复状态  
     const savedOpeneds = localStorage.getItem('menuOpeneds');
     const savedActive = localStorage.getItem('menuActive');
     if (savedOpeneds) {
@@ -131,9 +146,25 @@ export default {
     handleSelect (index, indexPath) {
       // 保存当前选中的菜单项索引到localStorage  
       localStorage.setItem('menuActive', index);
+      // 如果选中的是一个子菜单项，并且其父菜单不在defaultOpeneds中，  
+      // 我们应该将其父菜单添加到defaultOpeneds中（但实际上由于Vue和Element UI的机制，  
+      // 这通常不是必需的，因为选中子菜单项会自动展开父菜单）。  
+      // 但为了保险起见，我们可以在这里重新确认父菜单的展开状态。  
+      const parentIndex = indexPath[0];
+      if (!this.defaultOpeneds.includes(parentIndex)) {
+        // 注意：这里我们不直接修改this.defaultOpeneds，  
+        // 因为这不会影响到已经渲染的菜单。  
+        // 相反，我们应该更新localStorage中的值。  
+        let openeds = JSON.parse(localStorage.getItem('menuOpeneds')) || [];
+        if (!openeds.includes(parentIndex)) {
+          openeds.push(parentIndex);
+          localStorage.setItem('menuOpeneds', JSON.stringify(openeds));
+          // 如果需要，可以在这里强制Vue重新渲染菜单，  
+          // 但通常这不是必需的，因为Vue会在下次DOM更新时自动同步状态。  
+        }
+      }
     },
     handleOpen (index, indexPath) {
-      // 保存当前展开的菜单索引到localStorage（可能需要处理成数组形式）  
       let openeds = JSON.parse(localStorage.getItem('menuOpeneds')) || [];
       if (!openeds.includes(index)) {
         openeds.push(index);
@@ -148,39 +179,13 @@ export default {
     },
     //点击菜单
     handleClick (item) {
-      // 判断点击的菜单项是否有子菜单  
-      const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+      //当前页面的路由与跳转的路由不一样时跳转
+      // if (this.$route.path !== item.path && !(this.$route.path === '/Home' && (item.path === '/'))) {
+      this.$router.push({
+        name: item.name
+      })
+      // }
 
-      // 尝试从localStorage获取已打开的菜单项集合  
-      let openeds = JSON.parse(localStorage.getItem('menuOpeneds')) || [];
-
-      // 如果localStorage不可用或解析失败，则使用空数组  
-      if (!Array.isArray(openeds)) {
-        openeds = [];
-      }
-
-      // 如果点击的是有子菜单的项  
-      if (hasChildren) {
-        // 使用Set来管理唯一性  
-        const openedsSet = new Set(openeds);
-        const indexToToggle = item.lable; // 修正拼写错误  
-
-        // 切换菜单项的打开状态（如果已存在则移除，否则添加）  
-        if (openedsSet.has(indexToToggle)) {
-          openedsSet.delete(indexToToggle);
-        } else {
-          openedsSet.add(indexToToggle);
-        }
-
-        // 更新localStorage中的状态  
-        localStorage.setItem('menuOpeneds', JSON.stringify(Array.from(openedsSet)));
-      } else {
-        // 如果点击的是没有子菜单的项，则清空所有已打开的子菜单  
-        localStorage.setItem('menuOpeneds', JSON.stringify([]));
-      }
-
-      // 路由跳转逻辑  
-      this.$router.push({ name: item.name });
     }
   }
 };
