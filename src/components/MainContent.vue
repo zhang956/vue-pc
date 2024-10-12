@@ -23,19 +23,20 @@
                   :index="item.name"
                   @click="handleClick(item)">
       <i class="el-icon-menu"></i>
-      <span slot="title">{{item.lable}}</span>
+      <span slot="title">{{item.label}}</span>
     </el-menu-item>
     <el-submenu v-for="item in hasChildren"
-                :key="item.lable"
-                :index="item.lable">
+                :key="item.name"
+                :index="item.name">
       <template slot="title">
         <i class="el-icon-location"></i>
-        <span slot="title">{{item.lable}}</span>
+        <span slot="title">{{item.label}}</span>
       </template>
       <el-menu-item-group v-for="subIndex in item.children"
-                          :key="subIndex.name">
+                          :key="subIndex.name"
+                          :index="subIndex.name">
         <el-menu-item @click="handleClick(subIndex)"
-                      :index="subIndex.name">{{subIndex.lable}}</el-menu-item>
+                      :index="subIndex.name">{{subIndex.label}}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>
@@ -55,46 +56,47 @@ export default {
         {
           path: '/',
           name: 'Home',
-          lable: '首页',
+          label: '首页',
           icon: 'el-icon-s-home',
           url: 'Home/home'
         },
         {
-          name: 'user',
-          lable: '系统管理',
+          name: 'systemManagement',
+          label: '系统管理',
           icon: 'el-icon-s-home',
           children: [
             {
               path: '/userManagement',
               name: 'userManagement',
-              lable: '用户管理',
+              label: '用户管理',
               icon: 'setting',
               url: 'systemManagement/userManagement'
             },
             {
               path: '/rolesManagement',
               name: 'rolesManagement',
-              lable: '角色管理',
+              label: '角色管理',
               icon: 'setting',
               url: 'systemManagement/rolesManagement'
             }
           ]
         },
         {
-          lable: '其他',
+          name: 'Other',
+          label: '其他',
           icon: 'el-icon-s-home',
           children: [
             {
               path: '/PageOne',
               name: 'PageOne',
-              lable: '页面1',
+              label: '页面1',
               icon: 'setting',
               url: 'Other/PageOne'
             },
             {
               path: '/PageTwo',
               name: 'PageTwo',
-              lable: '页面2',
+              label: '页面2',
               icon: 'setting',
               url: 'Other/PageTwo'
             }
@@ -148,24 +150,17 @@ export default {
     },
     //点击菜单
     handleClick (item) {
-      // 判断点击的菜单项是否有子菜单  
-      const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-
       // 尝试从localStorage获取已打开的菜单项集合  
+      console.log('item', item)
       let openeds = JSON.parse(localStorage.getItem('menuOpeneds')) || [];
 
-      // 如果localStorage不可用或解析失败，则使用空数组  
-      if (!Array.isArray(openeds)) {
-        openeds = [];
-      }
-
       // 如果点击的是有子菜单的项  
-      if (hasChildren) {
+      if (Array.isArray(item.children) && item.children.length > 0) {
         // 使用Set来管理唯一性  
         const openedsSet = new Set(openeds);
-        const indexToToggle = item.lable; // 修正拼写错误  
+        const indexToToggle = item.name; // 使用name作为索引  
 
-        // 切换菜单项的打开状态（如果已存在则移除，否则添加）  
+        // 切换菜单项的打开状态  
         if (openedsSet.has(indexToToggle)) {
           openedsSet.delete(indexToToggle);
         } else {
@@ -174,9 +169,11 @@ export default {
 
         // 更新localStorage中的状态  
         localStorage.setItem('menuOpeneds', JSON.stringify(Array.from(openedsSet)));
+        this.defaultOpeneds = Array.from(openedsSet); // 更新组件状态以反映UI  
       } else {
         // 如果点击的是没有子菜单的项，则清空所有已打开的子菜单  
         localStorage.setItem('menuOpeneds', JSON.stringify([]));
+        this.defaultOpeneds = []; // 更新组件状态以反映UI  
       }
 
       // 路由跳转逻辑  
