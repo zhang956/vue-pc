@@ -78,6 +78,7 @@ export default {
       console.log('000000')
       this.typeState = !this.typeState
       this.$store.dispatch('setTypeState', this.typeState)
+	  this.$bus.$emit("valueSwitchName", this.valueSwitch)
     }
     // changeSkin () {
     //   console.log('换肤操作')

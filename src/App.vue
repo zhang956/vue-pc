@@ -37,6 +37,8 @@ export default {
     }
   },
   mounted () {
+	  //接收参数
+	   this.$bus.$on("valueSwitchName", e => {})
   }
 }
 </script>
@@ -51,6 +53,14 @@ html {
   // background: this.coloree;
   // color: red;
   /* 其他样式 */
+    /* 特殊节日置灰 */
+    // -webkit-filter: grayscale(100%);
+    // -moz-filter: grayscale(100%);
+    // -ms-filter: grayscale(100%);
+    // -o-filter: grayscale(100%);
+    // filter: grayscale(100%);
+    // filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+    // filter: gray;
 }
 #app {
   height: 100vh;

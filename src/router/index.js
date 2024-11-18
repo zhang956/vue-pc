@@ -15,7 +15,7 @@ const routes = [
   {
     path: '/',
     name: 'Sidebar',
-    component: Sidebar,
+    component: Sidebar, //将此页面作为主页面，里面包含了其他页面，所以不需要重定向
     redirect:'/Home', //重定向路由的路径，默认跳转的路径
       children:[
         {
