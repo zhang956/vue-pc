@@ -9,7 +9,7 @@ import{tiemCreat} from '@/utils/commonUtils'
 export default{
   data(){
     return{
-      time:'1675420800',
+      time:Math.floor(Date.now() / 1000), // 初始化 Unix 时间戳
       shijiName:''
     }
   },

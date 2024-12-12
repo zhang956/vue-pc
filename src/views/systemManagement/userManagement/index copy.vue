@@ -1,5 +1,12 @@
 <!--
- * @Description: 椭圆菜单动态展示
+ * @Description: 
+ * @Author: Zhangwenzhe
+ * @Github: KOBE
+ * @Date: 2024-12-12 11:43:36
+ * @LastEditors: Zhangwenzhe
+-->
+<!--
+ * @Description: 用户管理
  * @Author: Zhangwenzhe
  * @Github: KOBE
  * @Date: 2024-09-09 20:55:53
@@ -8,18 +15,13 @@
 <template>
   <div class="body">
     <div class="oval-menu">
-      <!-- 中心圆 -->
-      <div class="center-circle">
-        {{ centerText }}
-      </div>
-      <!-- 菜单项 -->
       <div v-for="(item, index) in menuItems"
            :key="index"
            class="menu-item"
            :style="getMenuItemStyle(index)"
            @click="handleClick(item)">
-        <div>{{ item.label }}</div>
-        <div style="font-size: 12px;">{{ item.value }}</div>
+        {{ item }}
+        <div>3333</div>
       </div>
     </div>
   </div>
@@ -35,18 +37,10 @@ export default {
   data () {
     //这里存放数据
     return {
-      menuItems: [
-        { label: '五水共治', value: 2831 },
-        { label: '四边三化', value: 1257 },
-        { label: '三改一拆', value: 2579 },
-        { label: '治危拆迁', value: 2831 },
-        { label: '安全生产', value: 1642 },
-        { label: '市容环境', value: 3789 },
-      ],
+      menuItems: ['首页', '关于我们', '服务', '案例', '博客', '联系我们'],
       radiusX: 250, // 椭圆横轴半径
-      radiusY: 150, // 椭圆纵轴半径
+      radiusY: 120, // 椭圆纵轴半径
       angleOffset: 0, // 初始角度偏移
-      centerText: 38493, // 中心圆的文字
     };
   },
   //监听属性 类似于data概念
@@ -95,7 +89,7 @@ export default {
     },
     // 菜单点击事件
     handleClick (item) {
-      alert(`您点击了菜单项：${item.label}, 值: ${item.value}`);
+      alert(`您点击了菜单项：${item}`);
     }
   }
 }
@@ -103,8 +97,10 @@ export default {
 <style  scoped>
 /* 页面全屏背景 */
 body {
+  width: 550px;
+  height: 300px;
   margin: 0;
-  background: linear-gradient(90deg, #0d1b2a, #1b263b);
+  background: linear-gradient(90deg, #1e3a8a, #2563eb);
   color: white;
   font-family: Arial, sans-serif;
   overflow: hidden;
@@ -118,34 +114,14 @@ body {
 .oval-menu {
   position: relative;
   width: 500px;
-  height: 300px;
-  background: none;
+  height: 250px;
+  background: baby blue;
   border-radius: 50%;
-  border: 2px solid #8a18a7;
-  margin: 20px 0 0 40px;
-}
-
-/* 中心圆 */
-.center-circle {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(
-    circle,
-    rgba(58, 123, 213, 1) 0%,
-    rgba(37, 83, 143, 1) 100%
-  );
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
+  border: 2px solid purple;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  overflow: visible;
 }
 
 /* 椭圆菜单项 */
@@ -153,20 +129,19 @@ body {
   position: absolute;
   width: 100px;
   height: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  color: blueviolet;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
   text-align: center;
   line-height: 50px;
   border-radius: 25px;
-  border: 2px solid rgba(98, 15, 192, 0.39);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s, background 0.3s;
   cursor: pointer;
-  font-size: 14px;
 }
 
 .menu-item:hover {
   transform: scale(1.2);
-  background: rgba(59, 130, 246, 0.8);
+  background: #3b82f6;
+  color: white;
 }
 </style>
